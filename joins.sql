@@ -3,36 +3,34 @@
 SELECT 
     ProductID, ProductName, UnitPrice, CategoryName
 FROM
-    products p
+    products AS p
         JOIN
-    categories c ON p.CategoryID = c.CategoryID
-ORDER BY CategoryName;
+    categories AS c ON p.CategoryID = c.CategoryID
+ORDER BY CategoryName, ProductName;
 
 
 -- 2. List the product id, product name, unit price and supplier name of all products that cost more than $75. Order by product name. 
 SELECT 
-    ProductID, ProductName, UnitPrice, s.CompanyName
+    p.ProductID, p.ProductName, p.UnitPrice, s.CompanyName AS "SupplierName"
 FROM
-    products p
+    products AS p
         JOIN
-    Suppliers s ON p.SupplierID = s.SupplierID
+    Suppliers AS s ON p.SupplierID = s.SupplierID
 WHERE
     UnitPrice > 75
 ORDER BY ProductName;
 
 -- 3. List the product id, product name, unit price, category name, and supplier name of every product. Order by product name.
 SELECT 
-    ProductID,
-    ProductName,
-    UnitPrice,
+    p.ProductID,
+    p.ProductName,
+    p.UnitPrice,
     c.CategoryName,
     s.CompanyName
 FROM
-    products p
-        JOIN
-    categories c ON p.CategoryID = c.CategoryID
-        JOIN
-    suppliers s ON p.SupplierID = s.SupplierID
+    products AS p
+        JOIN categories AS c ON p.CategoryID = c.CategoryID
+        JOIN suppliers AS s ON p.SupplierID = s.SupplierID
 ORDER BY ProductName;
  
 -- 4. What is the product name(s) and categories of the most expensive products? HINT: Find the max price in a subquery and then use that in your more complex query that joins products with categories, 
@@ -40,9 +38,9 @@ SELECT
     p.ProductName,
     c.CategoryName
 FROM
-    products p
+    products AS p
 JOIN
-    categories c
+    categories AS c
     ON p.CategoryID = c.CategoryID
 WHERE
     p.UnitPrice = (SELECT MAX(UnitPrice) FROM products);
@@ -53,7 +51,7 @@ SELECT
 FROM
     orders o
         JOIN
-    shippers s ON o.ShipVia = s.ShipperID
+    shippers AS s ON o.ShipVia = s.ShipperID
 WHERE
     o.ShipCountry = 'Germany';
     
@@ -65,11 +63,9 @@ SELECT
     o.ShipName,
     o.ShipAddress
 FROM
-    orders o
-JOIN
-    orderdetails od ON o.OrderID = od.OrderID
-JOIN
-    products p ON od.ProductID = p.ProductID
+    orders AS o
+JOIN `order details` AS od ON o.OrderID = od.OrderID
+JOIN products AS p ON od.ProductID = p.ProductID
 WHERE
     p.ProductName = 'Sasquatch Ale';
  
